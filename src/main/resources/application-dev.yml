@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://34.175.135.39:5432/laiacano
+    username: postgres
+    password: =;&O4]T'=#*rHEq~
