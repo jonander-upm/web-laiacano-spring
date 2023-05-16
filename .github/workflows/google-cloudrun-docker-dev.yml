@@ -29,7 +29,7 @@ jobs:
           distribution: 'temurin'
           
       - name: Build with Maven
-        uses: ./mvnw clean build -DskipTests -P dev
+        run: ./mvnw clean build -DskipTests -P dev
 
       - name: Google Auth
         id: auth
