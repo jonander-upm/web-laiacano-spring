@@ -1,5 +1,9 @@
 spring:
+  cloud:
+    gcp:
+      sql:
+        instance-connection-name: indigo-skyline-386510:europe-southwest1:laiacano
+        database-name: laiacano
   datasource:
-    url: jdbc:postgresql://34.175.135.39:5432/laiacano
     username: postgres
     password: =;&O4]T'=#*rHEq~
