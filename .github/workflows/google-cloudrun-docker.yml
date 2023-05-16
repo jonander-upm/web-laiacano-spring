@@ -1,0 +1,38 @@
+name: CI/CD - Develop
+
+on:
+  push:
+    branches: [ "develop" ]
+
+env:
+  PROJECT_ID: ${{GOOGLE_CLOUD_PROJECT_ID}}
+  SERVICE: ${{GOOGLE_CLOUD_SERVICE_NAME}}
+  REGION: ${{GOOGLE_CLOUD_SERVICE_REGION}}
+
+jobs:
+  deploy:
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Google Auth
+        id: auth
+        uses: 'google-github-actions/auth@v0'
+        with:
+         credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      - name: Deploy to Cloud Run
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v0
+        with:
+          service: ${{ env.SERVICE }}
+          region: ${{ env.REGION }}
+          # NOTE: If using a pre-built image, update the image name here
+          image: gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{ github.sha }}
+
+      - name: Show Output
+        run: echo ${{ steps.deploy.outputs.url }}
