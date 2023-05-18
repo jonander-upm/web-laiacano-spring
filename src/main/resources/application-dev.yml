@@ -4,6 +4,11 @@ spring:
       sql:
         database-name: laiacano
         instance-connection-name: indigo-skyline-386510:europe-southwest1:laiacano
+  data:
+    r2dbc:
+      repositories:
+        enabled: true
   r2dbc:
     username: postgres
-    password: =;&O4]T'=#*rHEq~
+    password: yu_32IEt?9gvvsB0
+    name: laiacano
