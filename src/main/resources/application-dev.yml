@@ -2,8 +2,8 @@ spring:
   cloud:
     gcp:
       sql:
-        instance-connection-name: indigo-skyline-386510:europe-southwest1:laiacano
         database-name: laiacano
-  datasource:
+        instance-connection-name: indigo-skyline-386510:europe-southwest1:laiacano
+  r2dbc:
     username: postgres
     password: =;&O4]T'=#*rHEq~
