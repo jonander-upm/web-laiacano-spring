@@ -1,7 +1,10 @@
 spring:
   profiles:
     active: @activatedProperties@
-  jpa:
-    generate-ddl: true
-    hibernate:
-      ddl-auto: update
+  r2dbc:
+    initialization-mode: always
+
+app:
+  jwt:
+    secret: TestPassword123.
+    validity: 3600000

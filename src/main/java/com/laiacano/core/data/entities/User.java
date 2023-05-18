@@ -1,17 +1,16 @@
 package com.laiacano.core.data.entities;
 
-import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
-@Entity
-@Table(name="users")
+@Table("users")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     @NonNull
     private String username;
@@ -19,7 +18,6 @@ public class User {
     private String email;
     @NonNull
     private String password;
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "roleId", referencedColumnName = "id")
+
     private Role role;
 }
