@@ -35,7 +35,7 @@ public class WebSecurityConfig {
             .and().csrf().disable()
             .authorizeExchange(exchange ->
                     exchange
-                    .pathMatchers("/auth/login", "/auth/register")
+                    .pathMatchers("/api/v1/auth/login", "/api/v1/auth/register")
                     .permitAll()
                     .and()
                     .authorizeExchange()
