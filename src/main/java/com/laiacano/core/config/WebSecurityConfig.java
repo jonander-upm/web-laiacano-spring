@@ -18,10 +18,12 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.reactive.config.CorsRegistry;
+import org.springframework.web.reactive.config.WebFluxConfigurer;
 
 @Configuration
 @EnableWebFluxSecurity
-public class WebSecurityConfig {
+public class WebSecurityConfig implements WebFluxConfigurer {
     private final JwtTokenFilter jwtTokenFilter;
     private final ReactiveUserDetailsService userDetailsService;
 
@@ -73,6 +75,14 @@ public class WebSecurityConfig {
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/api/**")
+                .allowedMethods("*")
+                .allowedOrigins("*")
+                .maxAge(3600);
     }
 
     @Bean

@@ -36,9 +36,12 @@ public class AuthenticationService {
                         new UsernamePasswordAuthenticationToken(
                                 loginDto.getUsername(), loginDto.getPassword()
                         ))
-                .map(auth -> {
+                .flatMap(auth -> {
                     org.springframework.security.core.userdetails.User user =
                             (org.springframework.security.core.userdetails.User) auth.getPrincipal();
+                    return this.userRepository.findByUsername(user.getUsername());
+                })
+                .map(user -> {
                     return new TokenDto(jwtTokenProvider.createToken(user));
                 });
     }
