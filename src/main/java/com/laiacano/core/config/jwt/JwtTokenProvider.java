@@ -5,6 +5,7 @@ import java.util.*;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
+import com.laiacano.core.data.entities.Role;
 import com.laiacano.core.data.entities.User;
 import com.laiacano.core.services.UserDetailsService;
 import io.jsonwebtoken.Claims;
@@ -27,7 +28,6 @@ public class JwtTokenProvider {
     private String secretKey;
     @Value("${app.jwt.validity}")
     private long validityInMilliseconds = 3600000;
-
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -36,19 +36,29 @@ public class JwtTokenProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(User user) {
-        Date now = new Date();
-        Date validity = new Date(now.getTime() + validityInMilliseconds);
+    public String createToken(String username, String email, Role role) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put(USERNAME_CLAIM, user.getUsername());
-        claims.put(EMAIL_CLAIM, user.getEmail());
-        claims.put(ROLE_CLAIM, user.getRole());
+        claims.put(USERNAME_CLAIM, username);
+        claims.put(EMAIL_CLAIM, email);
+        claims.put(ROLE_CLAIM, role);
         return Jwts.builder()
                 .addClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(validity)
+                .setIssuedAt(new Date())
+                .setExpiration(generateValidityDate())
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
+    }
+
+    public String refreshToken(String token) {
+        if(!isTokenValid(token)) {
+            return null;
+        }
+        return createToken(getUsername(token), getEmail(token), getRole(token));
+    }
+
+    private Date generateValidityDate() {
+        Date now = new Date();
+        return new Date(now.getTime() + validityInMilliseconds);
     }
 
     public Authentication getAuthentication(String token) {
@@ -61,7 +71,15 @@ public class JwtTokenProvider {
     }
 
     public String getUsername(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get(USERNAME_CLAIM, String.class);
+    }
+
+    public String getEmail(String token) {
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get(EMAIL_CLAIM, String.class);
+    }
+
+    public Role getRole(String token) {
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get(ROLE_CLAIM, Role.class);
     }
 
     public String resolveToken(HttpServletRequest req) {
@@ -72,7 +90,7 @@ public class JwtTokenProvider {
         return null;
     }
 
-    public boolean validateToken(String token) {
+    public boolean isTokenValid(String token) {
         Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
         return true;
     }

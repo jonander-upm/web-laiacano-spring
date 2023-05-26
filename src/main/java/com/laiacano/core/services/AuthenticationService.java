@@ -42,7 +42,7 @@ public class AuthenticationService {
                     return this.userRepository.findByUsername(user.getUsername());
                 })
                 .map(user -> {
-                    return new TokenDto(jwtTokenProvider.createToken(user));
+                    return new TokenDto(jwtTokenProvider.createToken(user.getUsername(), user.getEmail(), user.getRole()));
                 });
     }
 

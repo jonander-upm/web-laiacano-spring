@@ -1,5 +1,6 @@
 package com.laiacano.core.config;
 
+import com.laiacano.core.config.jwt.JwtRefreshTokenFilter;
 import com.laiacano.core.config.jwt.JwtTokenFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,11 +26,14 @@ import org.springframework.web.reactive.config.WebFluxConfigurer;
 @EnableWebFluxSecurity
 public class WebSecurityConfig implements WebFluxConfigurer {
     private final JwtTokenFilter jwtTokenFilter;
+    private final JwtRefreshTokenFilter jwtRefreshTokenFilter;
     private final ReactiveUserDetailsService userDetailsService;
 
-    public WebSecurityConfig(JwtTokenFilter jwtTokenFilter, ReactiveUserDetailsService userDetailsService) {
+    public WebSecurityConfig(JwtTokenFilter jwtTokenFilter, ReactiveUserDetailsService userDetailsService,
+                             JwtRefreshTokenFilter jwtRefreshTokenFilter) {
         this.jwtTokenFilter = jwtTokenFilter;
         this.userDetailsService = userDetailsService;
+        this.jwtRefreshTokenFilter = jwtRefreshTokenFilter;
     }
     @Bean
     public SecurityWebFilterChain filterChain(ServerHttpSecurity http) throws Exception {
@@ -45,6 +49,7 @@ public class WebSecurityConfig implements WebFluxConfigurer {
                     .authenticated()
                     .and()
                     .addFilterAt(jwtTokenFilter, SecurityWebFiltersOrder.AUTHENTICATION)
+                    .addFilterAfter(jwtRefreshTokenFilter,  SecurityWebFiltersOrder.AUTHENTICATION)
             )
             .httpBasic(Customizer.withDefaults());
 

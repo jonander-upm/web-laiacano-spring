@@ -30,7 +30,7 @@ public class JwtTokenFilter implements WebFilter {
             return filterChain.filter(exchange);
         }
         final String token = header.split(" ")[1].trim();
-        if (!jwtTokenProvider.validateToken(token)) {
+        if (jwtTokenProvider.isTokenValid(token)) {
             return filterChain.filter(exchange);
         }
         Authentication authentication = jwtTokenProvider.getAuthentication(token);
