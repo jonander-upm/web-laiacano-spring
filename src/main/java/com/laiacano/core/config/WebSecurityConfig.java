@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
@@ -41,7 +40,7 @@ public class WebSecurityConfig implements WebFluxConfigurer {
             .and().csrf().disable()
             .authorizeExchange(exchange ->
                     exchange
-                    .pathMatchers("/api/v1/auth/login", "/api/v1/auth/register")
+                    .pathMatchers("/api/v1/auth/**")
                     .permitAll()
                     .and()
                     .authorizeExchange()

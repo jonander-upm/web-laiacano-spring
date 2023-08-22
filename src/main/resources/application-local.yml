@@ -1,6 +1,10 @@
 server:
   port: 9000
 
+logging:
+  level:
+    root: INFO
+
 spring:
   cloud:
     gcp:
@@ -12,3 +16,18 @@ spring:
     username: sa
     password: admin
     database-platform: org.hibernate.dialect.H2Dialect
+  mail:
+    default-encoding: UTF-8
+    host: smtp.gmail.com
+    port: 587
+    username: vaginitisvagina@gmail.com
+    password: lbjvmrecujahxsnr
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+        debug: true
+    protocol: smtp
+    test-connection: false
