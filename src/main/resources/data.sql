@@ -1,1 +1,1 @@
-INSERT INTO users VALUES (1, 'laiacano', 'laiacano@gmail.com', '$2a$12$3FLeVTrCh/e7K.7oKbPpH.MuziTA13pkcHqrz8Dx12ylkgupwKHEe', 'MANAGER')
+INSERT INTO users VALUES (1, 'laiacano', 'laiacano@gmail.com', '$2a$12$3FLeVTrCh/e7K.7oKbPpH.MuziTA13pkcHqrz8Dx12ylkgupwKHEe', 'MANAGER', null)

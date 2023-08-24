@@ -1,9 +1,6 @@
 package com.laiacano.core.rest;
 
-import com.laiacano.core.rest.dtos.LoginDto;
-import com.laiacano.core.rest.dtos.RegisterDto;
-import com.laiacano.core.rest.dtos.UserDto;
-import com.laiacano.core.rest.dtos.TokenDto;
+import com.laiacano.core.rest.dtos.*;
 import com.laiacano.core.services.AuthenticationService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +12,8 @@ public class AuthenticationResource {
     protected static final String AUTHENTICATION = "/api/v1/auth";
     private static final String LOGIN = "/login";
     private static final String REGISTER = "/register";
+    private static final String FORGOT_PASSWORD = "/forgot-password";
+    private static final String RESET_PASSWORD = "/reset-password";
 
 
     private final AuthenticationService authenticationService;
@@ -31,5 +30,15 @@ public class AuthenticationResource {
     @PostMapping(REGISTER)
     public Mono<UserDto> register(@RequestBody @Valid RegisterDto registerDto) {
         return this.authenticationService.register(registerDto);
+    }
+
+    @GetMapping(FORGOT_PASSWORD)
+    public Mono<Void> requestPasswordChange(@RequestParam String username) {
+        return this.authenticationService.requestPasswordChange(username);
+    }
+
+    @PutMapping(RESET_PASSWORD)
+    public Mono<Void> resetPassword(@RequestBody @Valid ResetPasswordDto resetPasswordDto) {
+        return this.authenticationService.resetPassword(resetPasswordDto);
     }
 }
