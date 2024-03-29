@@ -2,18 +2,18 @@ package com.laiacano.core.data.entities;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
 
-@Table("portfolio_items")
+@Document(collection = "portfolio_items")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class PortfolioItem {
     @Id
-    private Integer id;
+    private String id;
     @NonNull
     private String name;
     private String description;

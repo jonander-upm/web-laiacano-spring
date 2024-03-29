@@ -23,7 +23,7 @@ public class PortfolioResource {
     }
 
     @GetMapping()
-    @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'MANAGER')")
     public Flux<PortfolioItem> viewPortfolio(@RequestParam(required = false) String name, @RequestParam(required = false) String description, @RequestParam(required = false) String uploadedDate) {
         return this.portfolioService.findByNameAndDercriptionAndUploadedDateNullSafe(name, description, uploadedDate);
     }
