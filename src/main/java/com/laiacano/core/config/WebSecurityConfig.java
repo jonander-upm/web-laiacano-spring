@@ -4,9 +4,13 @@ import com.laiacano.core.config.jwt.JwtRefreshTokenFilter;
 import com.laiacano.core.config.jwt.JwtTokenFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
+import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
@@ -23,6 +27,7 @@ import org.springframework.web.reactive.config.WebFluxConfigurer;
 
 @Configuration
 @EnableWebFluxSecurity
+@EnableMethodSecurity
 public class WebSecurityConfig implements WebFluxConfigurer {
     private final JwtTokenFilter jwtTokenFilter;
     private final JwtRefreshTokenFilter jwtRefreshTokenFilter;
@@ -61,7 +66,7 @@ public class WebSecurityConfig implements WebFluxConfigurer {
     }
 
     @Bean
-    public ReactiveAuthenticationManager authenticationManager() throws Exception {
+    public ReactiveAuthenticationManager authenticationManager() {
         UserDetailsRepositoryReactiveAuthenticationManager authenticationManager =
                 new UserDetailsRepositoryReactiveAuthenticationManager(userDetailsService);
         authenticationManager.setPasswordEncoder(encoder());
@@ -92,5 +97,10 @@ public class WebSecurityConfig implements WebFluxConfigurer {
     @Bean
     public PasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public MethodSecurityExpressionHandler methodSecurityExpressionHandler() {
+        return new DefaultMethodSecurityExpressionHandler();
     }
 }
