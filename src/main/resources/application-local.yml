@@ -5,6 +5,9 @@ logging:
   level:
     root: DEBUG
 
+files:
+  path: 'C:\Users\jande\Desktop\Web Laia Cano\resources\'
+
 spring:
   data:
     mongodb:

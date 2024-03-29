@@ -1,8 +1,6 @@
 spring:
   profiles:
     active: @activatedProperties@
-  r2dbc:
-    initialization-mode: always
 
 app:
   jwt:

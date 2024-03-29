@@ -3,10 +3,16 @@ package com.laiacano.core.services;
 import com.laiacano.core.data.daos.PortfolioItemRepository;
 import com.laiacano.core.data.entities.PortfolioItem;
 import com.laiacano.core.data.exceptions.BadRequestException;
+import com.laiacano.core.rest.dtos.PortfolioItemDto;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,26 +20,44 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.UUID;
 
 @Service
 public class PortfolioService {
     private static final String DATE_FORMAT = "yyyy-MM-dd";
+    private static final String FILENAME_SEPARATOR = "_";
+
+    private final String baseFilePath;
     private final PortfolioItemRepository portfolioItemRepository;
 
-    public PortfolioService(PortfolioItemRepository portfolioItemRepository) {
+    public PortfolioService(@Value("${files.path}") String baseFilePath, PortfolioItemRepository portfolioItemRepository) {
         this.portfolioItemRepository = portfolioItemRepository;
+        this.baseFilePath = baseFilePath;
     }
 
-    public Flux<PortfolioItem> findByNameAndDescriptionAndUploadedDateNullSafe(String name, String description, String uploadedDate) {
+    public Flux<PortfolioItemDto> findByNameAndDescriptionAndUploadedDateNullSafe(String name, String description, String uploadedDate) {
         LocalDate uploadedDateParsed = null;
         if(Objects.nonNull(uploadedDate)) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT, Locale.getDefault());
             uploadedDateParsed = LocalDate.parse(uploadedDate, formatter);
         }
-        return this.portfolioItemRepository.findByNameAndDescriptionAndUploadedDateNullSafe(name, description, uploadedDateParsed);
+        return this.portfolioItemRepository.findByNameAndDescriptionAndUploadedDateNullSafe(name, description, uploadedDateParsed)
+                .map(PortfolioItem::toPortfolioItemDto);
     }
 
-    public Mono<PortfolioItem> findById(String id) {
-        return this.portfolioItemRepository.findById(id);
+    public Mono<PortfolioItemDto> findById(String id) {
+        return this.portfolioItemRepository.findById(id)
+                .map(PortfolioItem::toPortfolioItemDto);
+    }
+
+    public Mono<Void> create(PortfolioItemDto portfolioItemDto) {
+        return this.portfolioItemRepository.save(new PortfolioItem(portfolioItemDto))
+                .flatMap(portfolioItem -> Mono.empty());
+    }
+
+    public Mono<String> uploadImage(FilePart image) {
+        String fileName = UUID.randomUUID() + FILENAME_SEPARATOR + image.filename();
+        File file = new File(baseFilePath + fileName);
+        return image.transferTo(file).then(Mono.just(file.getAbsolutePath()));
     }
 }
