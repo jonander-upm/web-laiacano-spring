@@ -5,6 +5,7 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
@@ -30,10 +31,11 @@ public class JwtTokenFilter implements WebFilter {
             return filterChain.filter(exchange);
         }
         final String token = header.split(" ")[1].trim();
-        if (jwtTokenProvider.isTokenValid(token)) {
+        if (!jwtTokenProvider.isTokenValid(token)) {
             return filterChain.filter(exchange);
         }
         Authentication authentication = jwtTokenProvider.getAuthentication(token);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
         return filterChain.filter(exchange)
                 .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
     }

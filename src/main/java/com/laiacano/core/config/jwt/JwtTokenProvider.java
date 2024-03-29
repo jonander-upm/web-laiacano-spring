@@ -6,13 +6,17 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
 import com.laiacano.core.data.entities.Role;
-import com.laiacano.core.data.entities.User;
+import com.laiacano.core.data.exceptions.UnauthorizedException;
 import com.laiacano.core.services.UserDetailsService;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Jwts;
@@ -23,6 +27,8 @@ public class JwtTokenProvider {
     private static final String USERNAME_CLAIM = "username";
     private static final String EMAIL_CLAIM = "email";
     private static final String ROLE_CLAIM = "role";
+
+    private static final String ROLE_PREFIX = "ROLE_";
 
     @Value("${app.jwt.secret")
     private String secretKey;
@@ -66,8 +72,10 @@ public class JwtTokenProvider {
                 .parseClaimsJws(token)
                 .getBody();
         String username = claims.get(USERNAME_CLAIM, String.class);
-        return new UsernamePasswordAuthenticationToken(this.userDetailsService.findByUsername(username),
-                token, null);
+        GrantedAuthority authority = new SimpleGrantedAuthority(ROLE_PREFIX + claims.get(ROLE_CLAIM));
+        User principal = new User(username, "", List.of(authority));
+        return new UsernamePasswordAuthenticationToken(principal,
+                token,  List.of(authority));
     }
 
     public String getUsername(String token) {
@@ -79,7 +87,8 @@ public class JwtTokenProvider {
     }
 
     public Role getRole(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get(ROLE_CLAIM, Role.class);
+        String role =  Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get(ROLE_CLAIM, String.class);
+        return Role.valueOf(role);
     }
 
     public String resolveToken(HttpServletRequest req) {
@@ -91,7 +100,11 @@ public class JwtTokenProvider {
     }
 
     public boolean isTokenValid(String token) {
-        Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+        try {
+            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+        } catch (Exception e) {
+            throw new UnauthorizedException("Not a valid token for user: " + this.getUsername(token));
+        }
         return true;
     }
 
