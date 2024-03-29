@@ -16,5 +16,5 @@ public interface PortfolioItemRepository extends ReactiveMongoRepository<Portfol
             + "?#{ [2] == null ? {_id : {$ne:null}} : { uploadedDate : [2] } },"
             + "{ disabled: false }"
             + "] }")
-    Flux<PortfolioItem> findByNameAndDercriptionAndUploadedDateNullSafe(String name, String description, LocalDate uploadedDate);
+    Flux<PortfolioItem> findByNameAndDescriptionAndUploadedDateNullSafe(String name, String description, LocalDate uploadedDate);
 }
