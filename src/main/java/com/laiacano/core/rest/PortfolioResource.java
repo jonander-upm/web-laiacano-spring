@@ -47,4 +47,10 @@ public class PortfolioResource {
     public Mono<String> uploadImage(@RequestPart("file") FilePart file) {
         return this.portfolioService.uploadImage(file);
     }
+
+    @PutMapping("{id}")
+    @PreAuthorize("hasRole('MANAGER')")
+    public Mono<Void> modifyPortfolioItem(@PathVariable String id, @RequestBody PortfolioItemDto portfolioItemDto) {
+        return this.portfolioService.update(id, portfolioItemDto);
+    }
 }

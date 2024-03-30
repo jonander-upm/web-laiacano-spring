@@ -3,7 +3,9 @@ package com.laiacano.core.services;
 import com.laiacano.core.data.daos.PortfolioItemRepository;
 import com.laiacano.core.data.entities.PortfolioItem;
 import com.laiacano.core.data.exceptions.BadRequestException;
+import com.laiacano.core.data.exceptions.NotFoundException;
 import com.laiacano.core.rest.dtos.PortfolioItemDto;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Service;
@@ -46,7 +48,7 @@ public class PortfolioService {
     }
 
     public Mono<PortfolioItemDto> findById(String id) {
-        return this.portfolioItemRepository.findById(id)
+        return this.findPortfolioItemOrError(id)
                 .map(PortfolioItem::toPortfolioItemDto);
     }
 
@@ -59,5 +61,20 @@ public class PortfolioService {
         String fileName = UUID.randomUUID() + FILENAME_SEPARATOR + image.filename();
         File file = new File(baseFilePath + fileName);
         return image.transferTo(file).then(Mono.just(file.getAbsolutePath()));
+    }
+
+    public Mono<Void> update(String id, PortfolioItemDto portfolioItemDto) {
+        return this.findPortfolioItemOrError(id)
+                .map(portfolioItem -> {
+                    BeanUtils.copyProperties(portfolioItemDto, portfolioItem, "id");
+                    return portfolioItem;
+                })
+                .flatMap(this.portfolioItemRepository::save)
+                .flatMap(portfolioItem -> Mono.empty());
+    }
+
+    private Mono<PortfolioItem> findPortfolioItemOrError(String id) {
+        return this.portfolioItemRepository.findById(id)
+                .switchIfEmpty(Mono.error(new NotFoundException("Item with id " + id + "not found")));
     }
 }
