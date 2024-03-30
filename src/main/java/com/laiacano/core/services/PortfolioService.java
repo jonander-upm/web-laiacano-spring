@@ -4,6 +4,7 @@ import com.laiacano.core.data.daos.PortfolioItemRepository;
 import com.laiacano.core.data.entities.PortfolioItem;
 import com.laiacano.core.data.exceptions.BadRequestException;
 import com.laiacano.core.data.exceptions.NotFoundException;
+import com.laiacano.core.rest.dtos.DisablePortfolioItemDto;
 import com.laiacano.core.rest.dtos.PortfolioItemDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +21,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
@@ -68,6 +70,20 @@ public class PortfolioService {
                 .map(portfolioItem -> {
                     BeanUtils.copyProperties(portfolioItemDto, portfolioItem, "id");
                     return portfolioItem;
+                })
+                .flatMap(this.portfolioItemRepository::save)
+                .flatMap(portfolioItem -> Mono.empty());
+    }
+
+    public Flux<Void> patchDisabled(List<DisablePortfolioItemDto> disablePortfolioItemDtos) {
+        return Flux.fromIterable(disablePortfolioItemDtos)
+                .flatMap(disablePortfolioItemDto -> {
+                    String id = disablePortfolioItemDto.getId();
+                    return this.portfolioItemRepository.findById(id)
+                        .map(portfolioItem -> {
+                            BeanUtils.copyProperties(disablePortfolioItemDto, portfolioItem, "id");
+                            return portfolioItem;
+                        });
                 })
                 .flatMap(this.portfolioItemRepository::save)
                 .flatMap(portfolioItem -> Mono.empty());
