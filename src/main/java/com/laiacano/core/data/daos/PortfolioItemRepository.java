@@ -18,4 +18,6 @@ public interface PortfolioItemRepository extends ReactiveMongoRepository<Portfol
             + "{ disabled: false }"
             + "] }")
     Flux<PortfolioItem> findByNameAndDescriptionAndUploadedDateNullSafe(String name, String description, LocalDate uploadedDate);
+
+    Mono<PortfolioItem> findByIdAndDisabledFalse(String id);
 }

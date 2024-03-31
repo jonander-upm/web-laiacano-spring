@@ -90,7 +90,7 @@ public class PortfolioService {
     }
 
     private Mono<PortfolioItem> findPortfolioItemOrError(String id) {
-        return this.portfolioItemRepository.findById(id)
-                .switchIfEmpty(Mono.error(new NotFoundException("Item with id " + id + "not found")));
+        return this.portfolioItemRepository.findByIdAndDisabledFalse(id)
+                .switchIfEmpty(Mono.error(new NotFoundException("Item with id " + id + " not found")));
     }
 }
