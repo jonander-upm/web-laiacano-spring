@@ -39,7 +39,7 @@ public class PortfolioService {
         this.baseFilePath = baseFilePath;
     }
 
-    public Flux<PortfolioItemDto> findByNameAndDescriptionAndUploadedDateNullSafe(String name, String description, String uploadedDate) {
+    public Flux<PortfolioItemDto> getPortfolioItemList(String name, String description, String uploadedDate) {
         LocalDate uploadedDateParsed = null;
         if(Objects.nonNull(uploadedDate)) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT, Locale.getDefault());
@@ -49,7 +49,7 @@ public class PortfolioService {
                 .map(PortfolioItem::toPortfolioItemDto);
     }
 
-    public Mono<PortfolioItemDto> findById(String id) {
+    public Mono<PortfolioItemDto> getPortfolioItem(String id) {
         return this.findPortfolioItemOrError(id)
                 .map(PortfolioItem::toPortfolioItemDto);
     }

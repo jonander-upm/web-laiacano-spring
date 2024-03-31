@@ -28,13 +28,13 @@ public class PortfolioResource {
     @GetMapping()
     @PreAuthorize("hasAnyRole('CUSTOMER', 'MANAGER')")
     public Flux<PortfolioItemDto> viewPortfolio(@RequestParam(required = false) String name, @RequestParam(required = false) String description, @RequestParam(required = false) String uploadedDate) {
-        return this.portfolioService.findByNameAndDescriptionAndUploadedDateNullSafe(name, description, uploadedDate);
+        return this.portfolioService.getPortfolioItemList(name, description, uploadedDate);
     }
 
     @GetMapping("{id}")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'MANAGER')")
     public Mono<PortfolioItemDto> viewPortfolioItem(@PathVariable String id) {
-        return this.portfolioService.findById(id);
+        return this.portfolioService.getPortfolioItem(id);
     }
 
     @PostMapping()
