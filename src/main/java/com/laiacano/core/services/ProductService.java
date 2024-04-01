@@ -1,10 +1,12 @@
 package com.laiacano.core.services;
 
+import com.laiacano.core.data.daos.PortfolioItemRepository;
 import com.laiacano.core.data.daos.ProductRepository;
 import com.laiacano.core.data.entities.Format;
 import com.laiacano.core.data.entities.PortfolioItem;
 import com.laiacano.core.data.entities.Product;
 import com.laiacano.core.data.exceptions.NotFoundException;
+import com.laiacano.core.rest.dtos.ProductDto;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -13,20 +15,46 @@ import reactor.core.publisher.Mono;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final PortfolioItemRepository portfolioItemRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, PortfolioItemRepository portfolioItemRepository) {
         this.productRepository = productRepository;
+        this.portfolioItemRepository = portfolioItemRepository;
     }
-    public Flux<Product> getProductList(String name, String description, Format format) {
-        return this.productRepository.findByNameAndDescriptionAndFormatNullSafe(name, description, format);
+    public Flux<ProductDto> getProductList(String name, String description, Format format) {
+        return this.productRepository.findByNameAndDescriptionAndFormatNullSafe(name, description, format)
+                .flatMap(this::mapProductDto);
     }
 
-    public Mono<Product> getProduct(String id) {
-        return this.findProductOrError(id);
+    public Mono<ProductDto> getProduct(String id) {
+        return this.findProductOrError(id)
+                .flatMap(this::mapProductDto);
+    }
+
+    public Mono<Void> create(Product product) {
+        return this.findPortfolioItemOrError(product.getPortfolioItemId())
+                .map(portfolioItem -> {
+                    if(product.getDisabled() == null) {
+                        product.setDisabled(false);
+                    }
+                    return product;
+                })
+                .flatMap(productRepository::save)
+                .flatMap(savedProduct -> Mono.empty());
     }
 
     private Mono<Product> findProductOrError(String id) {
         return this.productRepository.findByIdAndDisabledFalse(id)
                 .switchIfEmpty(Mono.error(new NotFoundException("Product with id " + id + " not found")));
+    }
+
+    private Mono<PortfolioItem> findPortfolioItemOrError(String id) {
+        return this.portfolioItemRepository.findById(id)
+                .switchIfEmpty(Mono.error(new NotFoundException("Portfolio item with id " + id + " not found")));
+    }
+
+    private Mono<ProductDto> mapProductDto(Product product) {
+        return this.findPortfolioItemOrError(product.getPortfolioItemId())
+                .map(portfolioItem -> product.toProductDto(portfolioItem.toPortfolioItemDto()));
     }
 }
