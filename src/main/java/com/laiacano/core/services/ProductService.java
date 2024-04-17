@@ -6,11 +6,15 @@ import com.laiacano.core.data.entities.Format;
 import com.laiacano.core.data.entities.PortfolioItem;
 import com.laiacano.core.data.entities.Product;
 import com.laiacano.core.data.exceptions.NotFoundException;
+import com.laiacano.core.rest.dtos.DisablePortfolioItemDto;
+import com.laiacano.core.rest.dtos.DisableProductDto;
 import com.laiacano.core.rest.dtos.ProductDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @Service
 public class ProductService {
@@ -59,6 +63,20 @@ public class ProductService {
     private Mono<Product> findProductOrError(String id) {
         return this.productRepository.findByIdAndDisabledFalse(id)
                 .switchIfEmpty(Mono.error(new NotFoundException("Product with id " + id + " not found")));
+    }
+
+    public Flux<Void> patchDisabled(List<DisableProductDto> disableProductDtos) {
+        return Flux.fromIterable(disableProductDtos)
+                .flatMap(disableProductDto -> {
+                    String id = disableProductDto.getId();
+                    return this.productRepository.findById(id)
+                            .map(product -> {
+                                BeanUtils.copyProperties(disableProductDto, product, "id");
+                                return product;
+                            });
+                })
+                .flatMap(this.productRepository::save)
+                .flatMap(product -> Mono.empty());
     }
 
     private Mono<PortfolioItem> findPortfolioItemOrError(String id) {
