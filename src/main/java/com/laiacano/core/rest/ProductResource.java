@@ -37,4 +37,10 @@ public class ProductResource {
     public Mono<Void> createProduct(@RequestBody Product product) {
         return this.productService.create(product);
     }
+
+    @PutMapping("{id}")
+    @PreAuthorize("hasRole('MANAGER')")
+    public Mono<Void> updateProduct(@PathVariable String id, @RequestBody Product product) {
+        return this.productService.update(id, product);
+    }
 }
