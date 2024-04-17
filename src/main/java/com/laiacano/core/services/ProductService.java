@@ -7,6 +7,7 @@ import com.laiacano.core.data.entities.PortfolioItem;
 import com.laiacano.core.data.entities.Product;
 import com.laiacano.core.data.exceptions.NotFoundException;
 import com.laiacano.core.rest.dtos.ProductDto;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -41,6 +42,18 @@ public class ProductService {
                 })
                 .flatMap(productRepository::save)
                 .flatMap(savedProduct -> Mono.empty());
+    }
+
+    public Mono<Void> update(String id, Product product) {
+        return this.findPortfolioItemOrError(product.getPortfolioItemId())
+            .flatMap(portfolioItem -> this.findProductOrError(id)
+                .map(productItem -> {
+
+                    BeanUtils.copyProperties(product, productItem, "id");
+                    return productItem;
+                }))
+            .flatMap(productRepository::save)
+            .flatMap(savedProduct -> Mono.empty());
     }
 
     private Mono<Product> findProductOrError(String id) {
