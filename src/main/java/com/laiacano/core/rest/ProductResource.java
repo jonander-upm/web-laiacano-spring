@@ -24,7 +24,6 @@ public class ProductResource {
     }
 
     @GetMapping()
-    @PreAuthorize("hasAnyRole('CUSTOMER', 'MANAGER')")
     public Flux<ProductDto> viewProducts(@RequestParam(required = false) String name, @RequestParam(required = false) String description, @RequestParam(required = false) Format format) {
         return this.productService.getProductList(name, description, format);
     }

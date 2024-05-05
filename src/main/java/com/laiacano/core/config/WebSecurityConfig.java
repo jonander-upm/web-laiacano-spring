@@ -45,12 +45,8 @@ public class WebSecurityConfig implements WebFluxConfigurer {
             .and().csrf().disable()
             .authorizeExchange(exchange ->
                     exchange
-                    .pathMatchers("/api/v1/auth/**")
+                    .pathMatchers("/api/v1/**")
                     .permitAll()
-                    .and()
-                    .authorizeExchange()
-                    .anyExchange()
-                    .authenticated()
                     .and()
                     .addFilterAt(jwtTokenFilter, SecurityWebFiltersOrder.AUTHENTICATION)
                     .addFilterAfter(jwtRefreshTokenFilter,  SecurityWebFiltersOrder.AUTHENTICATION)
