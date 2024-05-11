@@ -4,6 +4,7 @@ import com.laiacano.core.rest.dtos.DisablePortfolioItemDto;
 import com.laiacano.core.rest.dtos.PortfolioItemDto;
 import com.laiacano.core.services.PortfolioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -43,12 +44,6 @@ public class PortfolioResource {
         return this.portfolioService.create(portfolioItemDto);
     }
 
-    @PostMapping(value = PORTFOLIO_IMAGES)
-    @PreAuthorize("hasRole('MANAGER')")
-    public Mono<String> uploadImage(@RequestPart("file") FilePart file) {
-        return this.portfolioService.uploadImage(file);
-    }
-
     @PutMapping("{id}")
     @PreAuthorize("hasRole('MANAGER')")
     public Mono<Void> modifyPortfolioItem(@PathVariable String id, @RequestBody PortfolioItemDto portfolioItemDto) {
@@ -59,5 +54,16 @@ public class PortfolioResource {
     @PreAuthorize("hasRole('MANAGER')")
     public Flux<Void> setDisabledPortfolioItems(@RequestBody List<DisablePortfolioItemDto> disablePortfolioItemDtos) {
         return this.portfolioService.patchDisabled(disablePortfolioItemDtos);
+    }
+
+    @GetMapping(value = PORTFOLIO_IMAGES)
+    public Mono<Resource> getImage(@RequestParam String fileName) {
+        return this.portfolioService.getImage(fileName);
+    }
+
+    @PostMapping(value = PORTFOLIO_IMAGES)
+    @PreAuthorize("hasRole('MANAGER')")
+    public Mono<String> uploadImage(@RequestPart("file") FilePart file) {
+        return this.portfolioService.uploadImage(file);
     }
 }

@@ -2,23 +2,19 @@ package com.laiacano.core.services;
 
 import com.laiacano.core.data.daos.PortfolioItemRepository;
 import com.laiacano.core.data.entities.PortfolioItem;
-import com.laiacano.core.data.exceptions.BadRequestException;
 import com.laiacano.core.data.exceptions.NotFoundException;
 import com.laiacano.core.rest.dtos.DisablePortfolioItemDto;
 import com.laiacano.core.rest.dtos.PortfolioItemDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.io.File;
-import java.io.IOException;
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -59,12 +55,6 @@ public class PortfolioService {
                 .flatMap(portfolioItem -> Mono.empty());
     }
 
-    public Mono<String> uploadImage(FilePart image) {
-        String fileName = UUID.randomUUID() + FILENAME_SEPARATOR + image.filename();
-        File file = new File(baseFilePath + fileName);
-        return image.transferTo(file).then(Mono.just(file.getAbsolutePath()));
-    }
-
     public Mono<Void> update(String id, PortfolioItemDto portfolioItemDto) {
         return this.findPortfolioItemOrError(id)
                 .map(portfolioItem -> {
@@ -87,6 +77,16 @@ public class PortfolioService {
                 })
                 .flatMap(this.portfolioItemRepository::save)
                 .flatMap(portfolioItem -> Mono.empty());
+    }
+
+    public Mono<Resource> getImage(String fileName) {
+        return Mono.just(new FileSystemResource(baseFilePath + fileName));
+    }
+
+    public Mono<String> uploadImage(FilePart image) {
+        String fileName = UUID.randomUUID() + FILENAME_SEPARATOR + image.filename();
+        File file = new File(baseFilePath + fileName);
+        return image.transferTo(file).then(Mono.just(fileName));
     }
 
     private Mono<PortfolioItem> findPortfolioItemOrError(String id) {
