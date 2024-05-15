@@ -11,12 +11,11 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface ProductRepository extends ReactiveMongoRepository<Product, String> {
     @Query("{$and:[" // allow NULL: all elements
-            + "?#{ [0] == null ? {_id : {$ne:null}} : { name : {$regex:[0], $options: 'i'} } },"
-            + "?#{ [1] == null ? {_id : {$ne:null}} : { description : {$regex:[1], $options: 'i'} } },"
-            + "?#{ [2] == null ? {_id : {$ne:null}} : { format : [2] } },"
+            + "?#{ [0] == null ? {_id : {$ne:null}} : { portfolioItemId : [0] } },"
+            + "?#{ [1] == null ? {_id : {$ne:null}} : { format : [1] } },"
             + "{ disabled: false }"
             + "] }")
-    Flux<Product> findByNameAndDescriptionAndFormatNullSafe(String name, String description, Format format);
+    Flux<Product> findByPortfolioItemIdAndFormatNullSafe(String portfolioItemId, Format format);
 
     Mono<Product> findByIdAndDisabledFalse(String id);
 }
