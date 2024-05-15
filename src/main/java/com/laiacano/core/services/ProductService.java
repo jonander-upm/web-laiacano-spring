@@ -27,8 +27,10 @@ public class ProductService {
         this.portfolioItemRepository = portfolioItemRepository;
     }
     public Flux<ProductDto> getProductList(String name, String description, Format format) {
-        return this.productRepository.findByNameAndDescriptionAndFormatNullSafe(name, description, format)
-                .flatMap(this::mapProductDto);
+        return this.portfolioItemRepository.findByNameAndDescriptionAndUploadedDateNullSafe(name, description, null)
+            .flatMap(portfolioItem ->
+                        productRepository.findByPortfolioItemIdAndFormatNullSafe(portfolioItem.getId(), format)
+            ).flatMap(this::mapProductDto);
     }
 
     public Mono<ProductDto> getProduct(String id) {
