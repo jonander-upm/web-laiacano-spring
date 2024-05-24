@@ -32,6 +32,8 @@ public class Order {
     private Status status;
     @NonNull
     private LocalDate createdDate;
+    @NonNull
+    private String userId;
 
     public OrderDto toOrderDto(Address shippingAddress, Address billingAddress) {
         OrderDto orderDto = new OrderDto();

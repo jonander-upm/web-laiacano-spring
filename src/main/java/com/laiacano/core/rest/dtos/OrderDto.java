@@ -20,4 +20,5 @@ public class OrderDto {
     private BigDecimal price;
     private Status status;
     private LocalDate createdDate;
+    private String userId;
 }
