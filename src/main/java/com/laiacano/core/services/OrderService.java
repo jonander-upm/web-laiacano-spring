@@ -4,10 +4,14 @@ import com.laiacano.core.data.daos.AddressRepository;
 import com.laiacano.core.data.daos.OrderRepository;
 import com.laiacano.core.data.entities.Address;
 import com.laiacano.core.data.entities.Order;
+import com.laiacano.core.data.entities.Status;
 import com.laiacano.core.data.exceptions.NotFoundException;
 import com.laiacano.core.rest.dtos.OrderDto;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.time.LocalDate;
 
 @Service
 public class OrderService {
@@ -17,6 +21,11 @@ public class OrderService {
     public OrderService(OrderRepository orderRepository, AddressRepository addressRepository, ProductService productService) {
         this.orderRepository = orderRepository;
         this.addressRepository = addressRepository;
+    }
+
+    public Flux<OrderDto> getOrderList(String userId, Status status, LocalDate dateFrom, LocalDate dateTo) {
+        return this.orderRepository.findByUserIdAndStatusAndDateBetweenNullSafe(userId, status, dateFrom, dateTo)
+                .flatMap(this::mapOrderDto);
     }
 
     public Mono<OrderDto> getOrder(String id) {
