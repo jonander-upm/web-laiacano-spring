@@ -16,8 +16,7 @@ import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 @Service
 public class OrderService {
@@ -39,17 +38,40 @@ public class OrderService {
     }
 
     public Flux<OrderDto> getOrderList(String userId, Status status, LocalDate dateFrom, LocalDate dateTo) {
-        return this.orderRepository.findByUserIdAndStatusAndDateBetweenNullSafe(userId, status, dateFrom, dateTo)
-                .flatMap(this::mapOrderDto);
+        return this.getCurrentUser().map(currentUser -> {
+            if(currentUser.getRole() != Role.MANAGER) {
+                return currentUser.getId();
+            } else if(Objects.isNull(userId)) {
+                return "";
+            }
+            return userId;
+        })
+        .flux()
+        .flatMap(allowedUserId -> this.orderRepository.findByUserIdAndStatusAndDateBetweenNullSafe(allowedUserId, status, dateFrom, dateTo)
+            .flatMap(this::mapOrderDto))
+        ;
     }
 
     public Mono<OrderDto> getOrder(String id) {
         return this.findOrderOrError(id).flatMap(this::mapOrderDto);
     }
 
+    private Mono<User> getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        org.springframework.security.core.userdetails.User coreUser =
+                (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
+
+        return this.findUserOrError(coreUser.getUsername());
+    }
+
     private Mono<Order> findOrderOrError(String id) {
-        return this.orderRepository.findById(id)
-                .switchIfEmpty(Mono.error(new NotFoundException("Order with id " + id + " not found")));
+        return this.getCurrentUser().flatMap(currentUser -> {
+            if(currentUser.getRole() != Role.MANAGER) {
+                return this.orderRepository.findByIdAndUserId(id, currentUser.getId());
+            }
+            return this.orderRepository.findById(id);
+        })
+        .switchIfEmpty(Mono.error(new NotFoundException("Order with id " + id + " not found")));
     }
 
     private Mono<Address> findAddressOrError(String id) {
@@ -69,12 +91,12 @@ public class OrderService {
                 this.findAddressOrCreate(orderDto.getShippingAddress()),
                 this.findAddressOrCreate(orderDto.getBillingAddress()),
                 this.getTotalPrice(orderDto),
-                this.getCurrentUserId()
+                this.getCurrentUser()
         ).map(orderDataTuple -> orderDto.toOrder(
             orderDataTuple.getT1(),
             orderDataTuple.getT2(),
             orderDataTuple.getT3(),
-            orderDataTuple.getT4()
+            orderDataTuple.getT4().getId()
         ))
         .flatMap(orderRepository::save)
         .flatMap(savedOrder -> Mono.empty());
@@ -115,15 +137,6 @@ public class OrderService {
     private Mono<Product> findProductOrError(String id) {
         return this.productRepository.findById(id)
                 .switchIfEmpty(Mono.error(new NotFoundException("Product with id " + id + " not found")));
-    }
-
-    private Mono<String> getCurrentUserId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        org.springframework.security.core.userdetails.User coreUser =
-                (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
-
-        return this.findUserOrError(coreUser.getUsername())
-                .map(User::getId);
     }
 
     private Mono<User> findUserOrError(String username) {
