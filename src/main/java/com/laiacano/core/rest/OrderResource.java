@@ -6,6 +6,7 @@ import com.laiacano.core.data.entities.Product;
 import com.laiacano.core.data.entities.Status;
 import com.laiacano.core.rest.dtos.DisableProductDto;
 import com.laiacano.core.rest.dtos.OrderDto;
+import com.laiacano.core.rest.dtos.PortfolioItemDto;
 import com.laiacano.core.rest.dtos.ProductDto;
 import com.laiacano.core.services.OrderService;
 import com.laiacano.core.services.ProductService;
@@ -38,5 +39,11 @@ public class OrderResource {
     @PreAuthorize("hasAnyRole('CUSTOMER', 'MANAGER')")
     public Mono<OrderDto> viewOrder(@PathVariable String id) {
         return this.orderService.getOrder(id);
+    }
+
+    @PostMapping()
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'MANAGER')")
+    public Mono<Void> createOrder(@RequestBody OrderDto orderDto) {
+        return this.orderService.create(orderDto);
     }
 }
