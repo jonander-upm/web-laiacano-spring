@@ -25,7 +25,7 @@ public class Order {
     @NonNull
     private String billingAddressId;
     @NonNull
-    private List<String> productIds;
+    private List<OrderItem> orderItems;
     @NonNull
     private BigDecimal price;
     @NonNull
