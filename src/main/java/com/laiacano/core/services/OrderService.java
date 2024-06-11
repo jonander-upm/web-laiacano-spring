@@ -86,7 +86,7 @@ public class OrderService {
         ).map(addressTuple -> order.toOrderDto(addressTuple.getT1(), addressTuple.getT2()));
     }
 
-    public Mono<Void> create(OrderDto orderDto) {
+    public Mono<OrderDto> create(OrderDto orderDto) {
         return Mono.zip(
                 this.findAddressOrCreate(orderDto.getShippingAddress()),
                 this.findAddressOrCreate(orderDto.getBillingAddress()),
@@ -99,7 +99,11 @@ public class OrderService {
             orderDataTuple.getT4().getId()
         ))
         .flatMap(orderRepository::save)
-        .flatMap(savedOrder -> Mono.empty());
+        .map(savedOrder ->
+            OrderDto.builder()
+                .id(savedOrder.getId())
+                .build()
+        );
     }
 
     private Mono<String> findAddressOrCreate(Address address) {
