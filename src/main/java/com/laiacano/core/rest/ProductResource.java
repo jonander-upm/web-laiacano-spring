@@ -24,8 +24,8 @@ public class ProductResource {
     }
 
     @GetMapping()
-    public Flux<ProductDto> viewProducts(@RequestParam(required = false) String name, @RequestParam(required = false) String description, @RequestParam(required = false) Format format) {
-        return this.productService.getProductList(name, description, format);
+    public Flux<ProductDto> viewProducts(@RequestParam(required = false) String name, @RequestParam(required = false) String description, @RequestParam(required = false) Format format, @RequestParam(required = false) String portfolioItemId) {
+        return this.productService.getProductList(name, description, format, portfolioItemId);
     }
 
     @GetMapping("{id}")
