@@ -26,8 +26,9 @@ public class ProductService {
         this.productRepository = productRepository;
         this.portfolioItemRepository = portfolioItemRepository;
     }
-    public Flux<ProductDto> getProductList(String name, String description, Format format) {
+    public Flux<ProductDto> getProductList(String name, String description, Format format, String portfolioItemId) {
         return this.portfolioItemRepository.findByNameAndDescriptionAndUploadedDateNullSafe(name, description, null)
+                .filter(portfolioItem -> portfolioItemId == null || portfolioItemId.equals(portfolioItem.getId()))
             .flatMap(portfolioItem ->
                         productRepository.findByPortfolioItemIdAndFormatNullSafe(portfolioItem.getId(), format)
             ).flatMap(this::mapProductDto);
