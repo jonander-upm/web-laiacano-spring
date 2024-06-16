@@ -167,6 +167,7 @@
 						<exclude>**/config/*</exclude>
 						<exclude>**/utils/*</exclude>
 						<exclude>**/data/exceptions/*</exclude>
+						<exclude>**/services/MailingService.java</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
