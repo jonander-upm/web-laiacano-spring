@@ -21,11 +21,4 @@ public class UserDto {
         BeanUtils.copyProperties(user, this);
         this.role = user.getRole();
     }
-
-    public User toUser() {
-        User user = new User();
-        BeanUtils.copyProperties(this, user);
-        user.setRole(this.role);
-        return user;
-    }
 }

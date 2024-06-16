@@ -22,6 +22,7 @@ import java.util.List;
 @RequestMapping(OrderResource.ORDERS)
 public class OrderResource {
     protected static final String ORDERS = "/api/v1/orders";
+    protected static final String ORDER_ID = "/{id}";
 
     private final OrderService orderService;
 
@@ -35,14 +36,14 @@ public class OrderResource {
         return this.orderService.getOrderList(userId, status, dateFrom, dateTo);
     }
 
-    @GetMapping("{id}")
+    @GetMapping(ORDER_ID)
     @PreAuthorize("hasAnyRole('CUSTOMER', 'MANAGER')")
     public Mono<OrderDto> viewOrder(@PathVariable String id) {
         return this.orderService.getOrder(id);
     }
 
     @PostMapping()
-    @PreAuthorize("hasAnyRole('CUSTOMER', 'MANAGER')")
+    @PreAuthorize("hasAnyRole('MANAGER')")
     public Mono<OrderDto> createOrder(@RequestBody OrderDto orderDto) {
         return this.orderService.create(orderDto);
     }
