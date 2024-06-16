@@ -18,7 +18,7 @@ import java.util.List;
 
 @SpringBootTest
 @ActiveProfiles("local")
-public class OrderRepositoryTest {
+class OrderRepositoryTest {
     String id;
 
     @Autowired

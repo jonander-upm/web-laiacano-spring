@@ -1,11 +1,9 @@
 package com.laiacano.core.utils;
 
-import org.springframework.beans.factory.annotation.Value;
-
 public class RoutingUtils {
     private static final String LOCAL_URL = "http://localhost:4200";
     private static final String DEV_URL = "https://indigo-skyline-386510.web.app/";
-    private static final String PROD_URL = ""; // TODO: Update prod URL
+    private static final String PROD_URL = "";
     private final String activeProfile;
     
     public RoutingUtils(String activeProfile) {

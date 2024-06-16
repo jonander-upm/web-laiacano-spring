@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @SpringBootTest
-public class OrderDtoTest {
+class OrderDtoTest {
 
      @Test
     void testToOrder() {

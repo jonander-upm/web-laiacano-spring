@@ -1,9 +1,6 @@
 package com.laiacano.core.data.daos;
 
-import com.laiacano.core.data.entities.Order;
-import com.laiacano.core.data.entities.OrderItem;
 import com.laiacano.core.data.entities.PortfolioItem;
-import com.laiacano.core.data.entities.Status;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,13 +10,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import reactor.test.StepVerifier;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 
 @SpringBootTest
 @ActiveProfiles("local")
-public class PortfolioItemRepositoryTest {
+class PortfolioItemRepositoryTest {
     String id;
     LocalDate uploadedDate;
 

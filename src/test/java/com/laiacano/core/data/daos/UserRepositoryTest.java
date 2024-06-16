@@ -1,7 +1,5 @@
 package com.laiacano.core.data.daos;
 
-import com.laiacano.core.data.entities.Format;
-import com.laiacano.core.data.entities.Product;
 import com.laiacano.core.data.entities.Role;
 import com.laiacano.core.data.entities.User;
 import org.junit.jupiter.api.AfterEach;
@@ -13,12 +11,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import reactor.test.StepVerifier;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @SpringBootTest
 @ActiveProfiles("local")
-public class UserRepositoryTest {
+class UserRepositoryTest {
     String id;
     String username;
 

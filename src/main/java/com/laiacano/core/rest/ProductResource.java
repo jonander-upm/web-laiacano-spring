@@ -1,7 +1,6 @@
 package com.laiacano.core.rest;
 
 import com.laiacano.core.data.entities.Format;
-import com.laiacano.core.data.entities.Product;
 import com.laiacano.core.rest.dtos.CreateUpdateProductDto;
 import com.laiacano.core.rest.dtos.DisableProductDto;
 import com.laiacano.core.rest.dtos.ProductDto;

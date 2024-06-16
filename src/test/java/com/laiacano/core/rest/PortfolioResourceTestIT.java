@@ -33,7 +33,7 @@ import static org.mockito.Mockito.when;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
 @ActiveProfiles("local")
-public class PortfolioResourceTestIT {
+class PortfolioResourceTestIT {
     @Autowired
     private WebTestClient webTestClient;
     @Autowired

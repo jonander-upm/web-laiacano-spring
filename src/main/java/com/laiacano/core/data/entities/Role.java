@@ -1,7 +1,5 @@
 package com.laiacano.core.data.entities;
 
-import lombok.*;
-
 public enum Role {
     MANAGER, CUSTOMER;
 

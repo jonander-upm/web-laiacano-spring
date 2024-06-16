@@ -1,7 +1,5 @@
 package com.laiacano.core.rest;
 
-
-import com.laiacano.core.data.daos.UserRepository;
 import com.laiacano.core.data.entities.Role;
 import com.laiacano.core.rest.dtos.*;
 import com.laiacano.core.services.MailingService;
@@ -24,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
 @ActiveProfiles("local")
-public class AuthenticationResourceTestIT {
+class AuthenticationResourceTestIT {
     @Autowired
     private WebTestClient webTestClient;
     @MockBean
