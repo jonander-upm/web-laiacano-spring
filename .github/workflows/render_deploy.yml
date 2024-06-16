@@ -5,6 +5,7 @@ on:
     branches: [ develop ]
   pull_request:
     branches: [ develop ]
+  workflow_dispatch:
 jobs:
   test:
       name: Test - Unit & Integration & SonarCloud Scan
@@ -20,6 +21,7 @@ jobs:
       env:
         JWT_SECRET: ${{ secrets.JWT_SECRET }}
   deploy:
+      needs: test
       name: Deploy to Develop
       runs-on: ubuntu-latest
       steps:
