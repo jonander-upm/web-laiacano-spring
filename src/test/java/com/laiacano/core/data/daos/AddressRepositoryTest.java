@@ -8,7 +8,6 @@ import org.springframework.test.context.ActiveProfiles;
 import reactor.test.StepVerifier;
 
 @SpringBootTest
-@ActiveProfiles("dev")
 class AddressRepositoryTest {
     String id;
 

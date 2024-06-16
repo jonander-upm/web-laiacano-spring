@@ -4,6 +4,7 @@ import com.laiacano.core.config.jwt.JwtRefreshTokenFilter;
 import com.laiacano.core.config.jwt.JwtTokenFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
@@ -90,6 +91,7 @@ public class WebSecurityConfig implements WebFluxConfigurer {
     }
 
     @Bean
+    @Primary
     public PasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
     }

@@ -14,7 +14,6 @@ import reactor.test.StepVerifier;
 import java.math.BigDecimal;
 
 @SpringBootTest
-@ActiveProfiles("dev")
 class ProductRepositoryTest {
     String id;
 

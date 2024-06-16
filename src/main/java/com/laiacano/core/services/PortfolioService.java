@@ -24,8 +24,8 @@ import java.util.UUID;
 
 @Service
 public class PortfolioService {
-    private static final String DATE_FORMAT = "yyyy-MM-dd";
-    private static final String FILENAME_SEPARATOR = "_";
+    static final String DATE_FORMAT = "yyyy-MM-dd";
+    static final String FILENAME_SEPARATOR = "_";
 
     private final String baseFilePath;
     private final PortfolioItemRepository portfolioItemRepository;
