@@ -7,14 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.laiacano.core.data.entities.Role;
 import com.laiacano.core.data.exceptions.UnauthorizedException;
-import com.laiacano.core.services.UserDetailsService;
 import io.jsonwebtoken.Claims;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
@@ -30,12 +27,10 @@ public class JwtTokenProvider {
 
     private static final String ROLE_PREFIX = "ROLE_";
 
-    @Value("${app.jwt.secret")
+    @Value("${app.jwt.secret}")
     private String secretKey;
     @Value("${app.jwt.validity}")
     private long validityInMilliseconds = 3600000;
-    @Autowired
-    private UserDetailsService userDetailsService;
 
     @PostConstruct
     protected void init() {

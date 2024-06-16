@@ -1,6 +1,7 @@
 package com.laiacano.core.data.entities;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.laiacano.core.rest.dtos.CreateUpdateProductDto;
 import com.laiacano.core.rest.dtos.PortfolioItemDto;
 import com.laiacano.core.rest.dtos.ProductDto;
 import lombok.*;
@@ -28,6 +29,10 @@ public class Product {
     @NonNull
     private Format format;
     private Boolean disabled = false;
+
+    public Product(CreateUpdateProductDto createUpdateProductDto) {
+        BeanUtils.copyProperties(createUpdateProductDto, this);
+    }
 
     public ProductDto toProductDto(PortfolioItemDto portfolioItemDto) {
         ProductDto productDto = new ProductDto();

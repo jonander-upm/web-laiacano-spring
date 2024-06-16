@@ -2,6 +2,7 @@ package com.laiacano.core.rest;
 
 import com.laiacano.core.data.entities.Format;
 import com.laiacano.core.data.entities.Product;
+import com.laiacano.core.rest.dtos.CreateUpdateProductDto;
 import com.laiacano.core.rest.dtos.DisableProductDto;
 import com.laiacano.core.rest.dtos.ProductDto;
 import com.laiacano.core.services.ProductService;
@@ -36,13 +37,13 @@ public class ProductResource {
 
     @PostMapping()
     @PreAuthorize("hasRole('MANAGER')")
-    public Mono<Void> createProduct(@RequestBody Product product) {
+    public Mono<Void> createProduct(@RequestBody CreateUpdateProductDto product) {
         return this.productService.create(product);
     }
 
     @PutMapping("{id}")
     @PreAuthorize("hasRole('MANAGER')")
-    public Mono<Void> updateProduct(@PathVariable String id, @RequestBody Product product) {
+    public Mono<Void> updateProduct(@PathVariable String id, @RequestBody CreateUpdateProductDto product) {
         return this.productService.update(id, product);
     }
 

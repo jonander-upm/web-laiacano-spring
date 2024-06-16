@@ -12,6 +12,8 @@ import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
+import java.util.Objects;
+
 import static org.apache.commons.lang3.ObjectUtils.isEmpty;
 
 @Component
@@ -26,8 +28,9 @@ public class JwtTokenFilter implements WebFilter {
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain filterChain) {
         ServerHttpRequest request = exchange.getRequest();
         ServerHttpResponse response = exchange.getResponse();
-        final String header = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-        if (isEmpty(header) || !header.startsWith("Bearer ")) {
+        HttpHeaders headers = request.getHeaders();
+        final String header = headers.getFirst(HttpHeaders.AUTHORIZATION);
+        if (Objects.isNull(header) || isEmpty(header) || !header.startsWith("Bearer ")) {
             return filterChain.filter(exchange);
         }
         final String token = header.split(" ")[1].trim();
