@@ -1,0 +1,31 @@
+name: My Deploy
+
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+  test:
+      name: Test - Unit & Integration & SonarCloud Scan
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2
+          with: { fetch-depth: 0 }
+        - uses: actions/setup-java@v1
+          with:
+            java-version: 17
+        - name: Unit & Integration Tests
+          run: mvn -B verify
+      env:
+        JWT_SECRET: ${{ secrets.JWT_SECRET }}
+  deploy:
+      name: Deploy to Develop
+      runs-on: ubuntu-latest
+      steps:
+        - uses: johnbeynon/render-deploy-action@v0.0.8          
+          with:
+            service-id: ${{ secrets.MY_RENDER_SERVICE_ID }}
+            api-key: ${{ secrets.MY_RENDER_API_KEY }}
+            wait-for-success: true
