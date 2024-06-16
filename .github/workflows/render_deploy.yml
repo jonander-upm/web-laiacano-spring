@@ -22,6 +22,7 @@ jobs:
         run:  mvn -B verify -DskipTests sonar:sonar -Dsonar.projectKey=jonander-upm_web-laiacano-spring -Dsonar.organization=jonander-upm -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONARCLOUD_TOKEN
         env:
           GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
+          SONARCLOUD_TOKEN: ${{ secrets.SONAR_TOKEN}}
   test:
       needs: sonarcloud
       name: Test - Unit & Integration
