@@ -13,7 +13,7 @@ import reactor.test.StepVerifier;
 
 
 @SpringBootTest
-@ActiveProfiles("local")
+@ActiveProfiles("dev")
 class UserRepositoryTest {
     String id;
     String username;

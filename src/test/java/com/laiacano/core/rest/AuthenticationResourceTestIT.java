@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
-@ActiveProfiles("local")
+@ActiveProfiles("dev")
 class AuthenticationResourceTestIT {
     @Autowired
     private WebTestClient webTestClient;
