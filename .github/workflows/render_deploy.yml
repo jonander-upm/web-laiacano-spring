@@ -8,6 +8,7 @@ on:
   workflow_dispatch:
 jobs:
   sonarcloud:
+    name: Test - SonarCloud
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
