@@ -1,6 +1,5 @@
 package com.laiacano.core.rest.dtos;
 
-import com.laiacano.core.data.entities.Role;
 import com.laiacano.core.data.entities.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;

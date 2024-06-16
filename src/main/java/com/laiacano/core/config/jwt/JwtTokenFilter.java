@@ -27,7 +27,6 @@ public class JwtTokenFilter implements WebFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain filterChain) {
         ServerHttpRequest request = exchange.getRequest();
-        ServerHttpResponse response = exchange.getResponse();
         HttpHeaders headers = request.getHeaders();
         final String header = headers.getFirst(HttpHeaders.AUTHORIZATION);
         if (Objects.isNull(header) || isEmpty(header) || !header.startsWith("Bearer ")) {

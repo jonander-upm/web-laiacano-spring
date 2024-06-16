@@ -25,7 +25,7 @@ import java.util.List;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
 @ActiveProfiles("local")
-public class OrderResourceTestIT {
+class OrderResourceTestIT {
     @Autowired
     private WebTestClient webTestClient;
     @Autowired

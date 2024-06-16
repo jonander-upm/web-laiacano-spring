@@ -1,6 +1,5 @@
 package com.laiacano.core.data.daos;
 
-import com.laiacano.core.data.entities.Format;
 import com.laiacano.core.data.entities.Order;
 import com.laiacano.core.data.entities.Status;
 import org.springframework.data.mongodb.repository.Query;

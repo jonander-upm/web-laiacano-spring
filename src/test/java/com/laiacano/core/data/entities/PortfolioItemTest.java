@@ -9,7 +9,7 @@ import org.springframework.security.core.parameters.P;
 import java.time.LocalDate;
 
 @SpringBootTest
-public class PortfolioItemTest {
+class PortfolioItemTest {
 
     @Test
     void testBuilder() {

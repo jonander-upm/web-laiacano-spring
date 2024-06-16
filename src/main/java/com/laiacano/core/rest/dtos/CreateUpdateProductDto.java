@@ -2,7 +2,6 @@ package com.laiacano.core.rest.dtos;
 
 import com.laiacano.core.data.entities.Format;
 import lombok.*;
-import org.springframework.data.annotation.Id;
 
 import java.math.BigDecimal;
 

@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 
 @SpringBootTest
 @ActiveProfiles("local")
-public class ProductRepositoryTest {
+class ProductRepositoryTest {
     String id;
 
     @Autowired

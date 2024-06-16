@@ -7,8 +7,6 @@ import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
-import java.util.Objects;
-
 @Component
 public class JwtRefreshTokenFilter implements WebFilter {
     private static final String TOKEN_HEADER = "Authorization";

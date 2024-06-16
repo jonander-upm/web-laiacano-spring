@@ -24,7 +24,7 @@ import java.math.BigDecimal;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
 @ActiveProfiles("local")
-public class ProductResourceTestIT {
+class ProductResourceTestIT {
     @Autowired
     private WebTestClient webTestClient;
     @Autowired
@@ -32,7 +32,7 @@ public class ProductResourceTestIT {
 
 
     @Test
-    public void viewProductsTest() {
+    void viewProductsTest() {
         webTestClient.get()
                 .uri(ProductResource.PRODUCTS)
                 .exchange()
@@ -42,7 +42,7 @@ public class ProductResourceTestIT {
     }
 
     @Test
-    public void viewProductTest() {
+    void viewProductTest() {
         webTestClient.get()
                 .uri(ProductResource.PRODUCTS)
                 .exchange()
@@ -59,7 +59,7 @@ public class ProductResourceTestIT {
     }
 
     @Test
-    public void createProductTest() {
+    void createProductTest() {
         restClientTestService.loginManager(webTestClient)
                 .get()
                 .uri(PortfolioResource.PORTFOLIO)
@@ -84,7 +84,7 @@ public class ProductResourceTestIT {
     }
 
     @Test
-    public void updateProductTest() {
+    void updateProductTest() {
         restClientTestService.loginManager(webTestClient)
                 .get()
                 .uri(ProductResource.PRODUCTS)
@@ -110,7 +110,7 @@ public class ProductResourceTestIT {
     }
 
     @Test
-    public void setProductDisabledTest() {
+    void setProductDisabledTest() {
         restClientTestService.loginManager(webTestClient)
                 .get()
                 .uri(ProductResource.PRODUCTS)
