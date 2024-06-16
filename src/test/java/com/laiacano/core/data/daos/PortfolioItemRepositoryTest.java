@@ -13,7 +13,7 @@ import reactor.test.StepVerifier;
 import java.time.LocalDate;
 
 @SpringBootTest
-@ActiveProfiles("local")
+@ActiveProfiles("dev")
 class PortfolioItemRepositoryTest {
     String id;
     LocalDate uploadedDate;
