@@ -40,7 +40,7 @@ class AuthenticationServiceTest {
     private AuthenticationService authenticationService;
 
     @Test
-    public void testLogin() {
+    void testLogin() {
         LoginDto loginDto = new LoginDto("user", "password");
         org.springframework.security.core.userdetails.User userDetails =
                 new org.springframework.security.core.userdetails.User("user", "password", new ArrayList<>());
@@ -59,7 +59,7 @@ class AuthenticationServiceTest {
     }
 
     @Test
-    public void testRegister() {
+    void testRegister() {
         RegisterDto registerDto = new RegisterDto("user", "email@example.com", "password");
         when(userRepository.findByUsername("user")).thenReturn(Mono.empty());
         when(userRepository.save(any(User.class))).thenReturn(Mono.just(new User("", "user", "email@example.com", "encodedPassword", Role.CUSTOMER, "")));
@@ -73,7 +73,7 @@ class AuthenticationServiceTest {
     }
 
     @Test
-    public void testAssertUserNotExistUserExists() {
+    void testAssertUserNotExistUserExists() {
         when(userRepository.findByUsername("existingUser")).thenReturn(Mono.just(new User()));
 
         Mono<Void> result = authenticationService.assertUserNotExist("existingUser");
@@ -84,7 +84,7 @@ class AuthenticationServiceTest {
     }
 
     @Test
-    public void testRequestPasswordChangeUserNotFound() {
+    void testRequestPasswordChangeUserNotFound() {
         when(userRepository.findByUsername("nonexistentUser")).thenReturn(Mono.empty());
 
         Mono<Void> result = authenticationService.requestPasswordChange("nonexistentUser");
@@ -95,7 +95,7 @@ class AuthenticationServiceTest {
     }
 
     @Test
-    public void testResetPassword() {
+    void testResetPassword() {
         ResetPasswordDto resetPasswordDto = new ResetPasswordDto("user", "token", "newPassword");
 
         User user = new User("", "user", "email@example.com", "oldPassword", Role.CUSTOMER, "");

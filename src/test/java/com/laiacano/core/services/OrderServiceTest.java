@@ -46,7 +46,7 @@ class OrderServiceTest {
     private OrderService orderService;
 
     @Test
-    public void testGetOrderList() {
+    void testGetOrderList() {
         User userDetails = new User("user", "password", new ArrayList<>());
         Authentication auth = Mockito.mock(Authentication.class);
         when(auth.getPrincipal()).thenReturn(userDetails);
@@ -70,7 +70,7 @@ class OrderServiceTest {
     }
 
     @Test
-    public void testGetOrderListManager() {
+    void testGetOrderListManager() {
         User userDetails = new User("user", "password", new ArrayList<>());
         Authentication auth = Mockito.mock(Authentication.class);
         when(auth.getPrincipal()).thenReturn(userDetails);
@@ -94,7 +94,7 @@ class OrderServiceTest {
     }
 
     @Test
-    public void testGetOrderListNullUserId() {
+    void testGetOrderListNullUserId() {
         User userDetails = new User("user", "password", new ArrayList<>());
         Authentication auth = Mockito.mock(Authentication.class);
         when(auth.getPrincipal()).thenReturn(userDetails);
@@ -118,7 +118,7 @@ class OrderServiceTest {
     }
 
     @Test
-    public void testGetOrder() {
+    void testGetOrder() {
         User userDetails = new User("user", "password", new ArrayList<>());
         Authentication auth = Mockito.mock(Authentication.class);
         when(auth.getPrincipal()).thenReturn(userDetails);
@@ -143,7 +143,7 @@ class OrderServiceTest {
     }
 
     @Test
-    public void testCreateOrder() {
+    void testCreateOrder() {
         User userDetails = new User("user", "password", new ArrayList<>());
         Authentication auth = Mockito.mock(Authentication.class);
         when(auth.getPrincipal()).thenReturn(userDetails);

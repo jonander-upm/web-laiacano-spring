@@ -104,7 +104,7 @@ class PortfolioServiceTest {
     }
 
     @Test
-    void testGetImage() throws IOException {
+    void testGetImage() {
         String fileName = "test.jpg";
 
         when(portfolioItemRepository.findByIdAndDisabledFalse("1")).thenReturn(Mono.just(new PortfolioItem("1", "Name", "Description", "/test.jpg", LocalDate.now(), false)));
