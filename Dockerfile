@@ -1,10 +1,10 @@
 FROM maven:3.8.7-openjdk-18 AS build
 WORKDIR /app
 COPY . /app/
-RUN mvn clean package
+RUN mvn clean package -Pdev -Dspring.active.profile=dev
 
 FROM eclipse-temurin:17-jdk
 WORKDIR /app
 COPY --from=build /app/target/*.jar /app/app.jar
 EXPOSE 9000
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
