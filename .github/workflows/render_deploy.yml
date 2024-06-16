@@ -16,7 +16,7 @@ jobs:
           with:
             java-version: 17
         - name: Unit & Integration Tests
-          run: mvn -B verify -Pdev
+          run: mvn -B verify -P dev
       env:
         JWT_SECRET: ${{ secrets.JWT_SECRET }}
   deploy:
