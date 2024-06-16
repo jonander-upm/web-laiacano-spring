@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 jobs:
   test:
-    name: Test - Unit & Integration
+    name: Test - Unit & Integration & SonarCloud Scan
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -17,26 +17,20 @@ jobs:
         with:
           java-version: 17
       - name: Unit & Integration Tests
-        run: mvn -B verify -P dev -Dspring.profiles.active=dev
-    env:
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
-  sonarcloud:
-    needs: test
-    name: Test - SonarCloud
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK 17
-        uses: actions/setup-java@v2
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-          cache: maven
-      - name: Build with Maven cloud
-        run:  mvn -B verify -DskipTests sonar:sonar -Dsonar.projectKey=jonander-upm_web-laiacano-spring -Dsonar.organization=jonander-upm -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONARCLOUD_TOKEN
+        run: mvn -B verify -Pdev -Dspring.active.profile=dev
         env:
-          GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
-          SONARCLOUD_TOKEN: ${{ secrets.SONAR_TOKEN}}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      - name: Sonar
+        if: success()
+        run: >
+          mvn -B verify -DskipTests sonar:sonar
+          -Dsonar.projectKey=jonander-upm_web-laiacano-spring
+          -Dsonar.organization=jonander-upm
+          -Dsonar.host.url=https://sonarcloud.io
+          -Dsonar.login=$SONAR_TOKEN
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   deploy:
       needs: test
       name: Deploy to Develop
