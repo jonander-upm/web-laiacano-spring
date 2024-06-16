@@ -23,7 +23,6 @@ import java.math.BigDecimal;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
-@ActiveProfiles("dev")
 class ProductResourceTestIT {
     @Autowired
     private WebTestClient webTestClient;

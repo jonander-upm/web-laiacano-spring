@@ -24,7 +24,6 @@ import java.util.List;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
-@ActiveProfiles("dev")
 class OrderResourceTestIT {
     @Autowired
     private WebTestClient webTestClient;

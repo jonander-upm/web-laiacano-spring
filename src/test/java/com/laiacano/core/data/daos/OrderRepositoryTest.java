@@ -17,7 +17,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 @SpringBootTest
-@ActiveProfiles("dev")
 class OrderRepositoryTest {
     String id;
 

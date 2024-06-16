@@ -18,7 +18,6 @@ public class RegisterDto {
     @NonNull
     @Email
     private String email;
-    @NonNull
     @Length(min = 8, max = 32)
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@.$¡!%*¿?&=()#|<>\\-_])[A-Za-z\\d@.$¡!%*¿?&=()#|<>\\-_]{8,32}$")
     private String password;

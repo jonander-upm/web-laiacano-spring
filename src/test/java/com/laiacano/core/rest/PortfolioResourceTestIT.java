@@ -32,7 +32,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
-@ActiveProfiles("dev")
 class PortfolioResourceTestIT {
     @Autowired
     private WebTestClient webTestClient;
@@ -83,7 +82,7 @@ class PortfolioResourceTestIT {
 
                                 DisablePortfolioItemDto disablePortfolioItemDto = DisablePortfolioItemDto.builder()
                                         .id(portfolioItem.getId())
-                                        .disabled(true)
+                                        .disabled(false)
                                         .build();
                                 restClientTestService.loginManager(webTestClient)
                                         .patch()
