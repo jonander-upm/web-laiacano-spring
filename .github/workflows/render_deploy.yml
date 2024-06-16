@@ -7,7 +7,21 @@ on:
     branches: [ develop ]
   workflow_dispatch:
 jobs:
+  test:
+    name: Test - Unit & Integration
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 17
+      - name: Unit & Integration Tests
+        run: mvn -B verify -P dev -Dspring.profiles.active=dev
+    env:
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
   sonarcloud:
+    needs: test
     name: Test - SonarCloud
     runs-on: ubuntu-latest
     steps:
@@ -23,20 +37,6 @@ jobs:
         env:
           GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
           SONARCLOUD_TOKEN: ${{ secrets.SONAR_TOKEN}}
-  test:
-      needs: sonarcloud
-      name: Test - Unit & Integration
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2
-          with: { fetch-depth: 0 }
-        - uses: actions/setup-java@v1
-          with:
-            java-version: 17
-        - name: Unit & Integration Tests
-          run: mvn -B verify -P dev -Dspring.profiles.active=dev
-      env:
-        JWT_SECRET: ${{ secrets.JWT_SECRET }}
   deploy:
       needs: test
       name: Deploy to Develop
