@@ -4,7 +4,6 @@ import com.laiacano.core.rest.dtos.PortfolioItemDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.parameters.P;
 
 import java.time.LocalDate;
 
