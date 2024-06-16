@@ -17,6 +17,7 @@ import java.util.List;
 @RequestMapping(PortfolioResource.PORTFOLIO)
 public class PortfolioResource {
     protected static final String PORTFOLIO = "/api/v1/portfolio";
+    protected static final String PORTFOLIO_ITEM_ID = "/{id}";
     protected static final String PORTFOLIO_IMAGES = "/images";
 
     private final PortfolioService portfolioService;
@@ -27,13 +28,11 @@ public class PortfolioResource {
     }
 
     @GetMapping()
-    @PreAuthorize("hasAnyRole('CUSTOMER', 'MANAGER')")
     public Flux<PortfolioItemDto> viewPortfolio(@RequestParam(required = false) String name, @RequestParam(required = false) String description, @RequestParam(required = false) String uploadedDate) {
         return this.portfolioService.getPortfolioItemList(name, description, uploadedDate);
     }
 
-    @GetMapping("{id}")
-    @PreAuthorize("hasAnyRole('CUSTOMER', 'MANAGER')")
+    @GetMapping(PORTFOLIO_ITEM_ID)
     public Mono<PortfolioItemDto> viewPortfolioItem(@PathVariable String id) {
         return this.portfolioService.getPortfolioItem(id);
     }
@@ -44,7 +43,7 @@ public class PortfolioResource {
         return this.portfolioService.create(portfolioItemDto);
     }
 
-    @PutMapping("{id}")
+    @PutMapping(PORTFOLIO_ITEM_ID)
     @PreAuthorize("hasRole('MANAGER')")
     public Mono<Void> modifyPortfolioItem(@PathVariable String id, @RequestBody PortfolioItemDto portfolioItemDto) {
         return this.portfolioService.update(id, portfolioItemDto);
@@ -56,12 +55,12 @@ public class PortfolioResource {
         return this.portfolioService.patchDisabled(disablePortfolioItemDtos);
     }
 
-    @GetMapping(value = PORTFOLIO_IMAGES)
+    @GetMapping(PORTFOLIO_IMAGES)
     public Mono<Resource> getImage(@RequestParam String fileName) {
         return this.portfolioService.getImage(fileName);
     }
 
-    @PostMapping(value = PORTFOLIO_IMAGES)
+    @PostMapping( PORTFOLIO_IMAGES)
     @PreAuthorize("hasRole('MANAGER')")
     public Mono<String> uploadImage(@RequestPart("file") FilePart file) {
         return this.portfolioService.uploadImage(file);

@@ -24,10 +24,6 @@ public class RegisterDto {
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@.$¡!%*¿?&=()#|<>\\-_])[A-Za-z\\d@.$¡!%*¿?&=()#|<>\\-_]{8,32}$")
     private String password;
 
-    public RegisterDto(User user) {
-        BeanUtils.copyProperties(user, this);
-    }
-
     public User toUser() {
         User user = new User();
         BeanUtils.copyProperties(this, user);

@@ -16,6 +16,7 @@ import java.util.List;
 @RequestMapping(ProductResource.PRODUCTS)
 public class ProductResource {
     protected static final String PRODUCTS = "/api/v1/products";
+    protected static final String PRODUCT_ID = "/{id}";
 
     private final ProductService productService;
 
@@ -29,7 +30,6 @@ public class ProductResource {
     }
 
     @GetMapping("{id}")
-    @PreAuthorize("hasAnyRole('CUSTOMER', 'MANAGER')")
     public Mono<ProductDto> viewProduct(@PathVariable String id) {
         return this.productService.getProduct(id);
     }
@@ -48,7 +48,7 @@ public class ProductResource {
 
     @PatchMapping()
     @PreAuthorize("hasRole('MANAGER')")
-    public Flux<Void> updateProduct(@RequestBody List<DisableProductDto> disableProductDtos) {
+    public Flux<Void> setProductDisabled(@RequestBody List<DisableProductDto> disableProductDtos) {
         return this.productService.patchDisabled(disableProductDtos);
     }
 }

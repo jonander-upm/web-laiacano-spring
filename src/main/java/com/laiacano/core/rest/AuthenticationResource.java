@@ -10,10 +10,10 @@ import reactor.core.publisher.Mono;
 @RequestMapping(AuthenticationResource.AUTHENTICATION)
 public class AuthenticationResource {
     protected static final String AUTHENTICATION = "/api/v1/auth";
-    private static final String LOGIN = "/login";
-    private static final String REGISTER = "/register";
-    private static final String FORGOT_PASSWORD = "/forgot-password";
-    private static final String RESET_PASSWORD = "/reset-password";
+    protected static final String LOGIN = "/login";
+    protected static final String REGISTER = "/register";
+    protected static final String FORGOT_PASSWORD = "/forgot-password";
+    protected static final String RESET_PASSWORD = "/reset-password";
 
 
     private final AuthenticationService authenticationService;
