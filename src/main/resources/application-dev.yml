@@ -1,14 +1,33 @@
+server:
+  port: 9000
+
+logging:
+  level:
+    root: DEBUG
+
+files:
+  path: 'C:\Users\jande\Desktop\Web Laia Cano\resources\'
+
 spring:
-  cloud:
-    gcp:
-      sql:
-        database-name: laiacano
-        instance-connection-name: indigo-skyline-386510:europe-southwest1:laiacano
   data:
+    mongodb:
+      uri: mongodb+srv://jannybananny:bp5nYuhQn0bix2Z4@laiacano.jv9bxqw.mongodb.net/?retryWrites=true&w=majority&appName=LaiaCano
+      database: laiacano
     r2dbc:
       repositories:
-        enabled: true
-  r2dbc:
-    username: postgres
-    password: yu_32IEt?9gvvsB0
-    name: laiacano
+        enabled: false
+  mail:
+    default-encoding: UTF-8
+    host: smtp.gmail.com
+    port: 587
+    username: vaginitisvagina@gmail.com
+    password: lbjvmrecujahxsnr
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+        debug: true
+    protocol: smtp
+    test-connection: false
