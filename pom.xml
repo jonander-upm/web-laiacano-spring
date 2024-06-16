@@ -19,8 +19,9 @@
 		<spring-cloud.version>2020.0.3</spring-cloud.version>
 		<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-		<sonar.jacoco.reportPath>${project.basedir}/target/jacoco.exec</sonar.jacoco.reportPath>
-	</properties>
+		<sonar.coverage.jacoco.xmlReportPaths>
+			${project.basedir}/target/jacoco-report/jacoco.xml
+		</sonar.coverage.jacoco.xmlReportPaths>	</properties>
 	<profiles>
 		<profile>
 			<id>local</id>
