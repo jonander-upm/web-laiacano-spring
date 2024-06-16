@@ -6,6 +6,7 @@ import com.laiacano.core.data.entities.Format;
 import com.laiacano.core.data.entities.PortfolioItem;
 import com.laiacano.core.data.entities.Product;
 import com.laiacano.core.data.exceptions.NotFoundException;
+import com.laiacano.core.rest.dtos.CreateUpdateProductDto;
 import com.laiacano.core.rest.dtos.DisablePortfolioItemDto;
 import com.laiacano.core.rest.dtos.DisableProductDto;
 import com.laiacano.core.rest.dtos.ProductDto;
@@ -39,19 +40,19 @@ public class ProductService {
                 .flatMap(this::mapProductDto);
     }
 
-    public Mono<Void> create(Product product) {
+    public Mono<Void> create(CreateUpdateProductDto product) {
         return this.findPortfolioItemOrError(product.getPortfolioItemId())
                 .map(portfolioItem -> {
                     if(product.getDisabled() == null) {
                         product.setDisabled(false);
                     }
-                    return product;
+                    return new Product(product);
                 })
                 .flatMap(productRepository::save)
                 .flatMap(savedProduct -> Mono.empty());
     }
 
-    public Mono<Void> update(String id, Product product) {
+    public Mono<Void> update(String id, CreateUpdateProductDto product) {
         return this.findPortfolioItemOrError(product.getPortfolioItemId())
             .flatMap(portfolioItem -> this.findProductOrError(id)
                 .map(productItem -> {
