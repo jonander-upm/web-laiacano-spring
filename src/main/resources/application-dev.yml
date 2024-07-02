@@ -6,7 +6,7 @@ logging:
     root: DEBUG
 
 files:
-  path: 'C:\Users\jande\Desktop\Web Laia Cano\resources\'
+  path: '.\img\'
 
 spring:
   data:
