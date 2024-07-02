@@ -35,7 +35,7 @@ public class OrderResource {
     }
 
     @PostMapping()
-    @PreAuthorize("hasAnyRole('MANAGER')")
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'MANAGER')")
     public Mono<OrderDto> createOrder(@RequestBody OrderDto orderDto) {
         return this.orderService.create(orderDto);
     }
