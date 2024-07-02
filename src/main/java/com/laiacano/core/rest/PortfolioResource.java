@@ -60,8 +60,7 @@ public class PortfolioResource {
         return this.portfolioService.getImage(fileName);
     }
 
-    @PostMapping( PORTFOLIO_IMAGES)
-    @PreAuthorize("hasRole('MANAGER')")
+    @PostMapping(PORTFOLIO_IMAGES)
     public Mono<String> uploadImage(@RequestPart("file") FilePart file) {
         return this.portfolioService.uploadImage(file);
     }
